@@ -34,3 +34,18 @@ Este projeto serve como ambiente de aprendizado profissional e prático para o d
 3. Implementar a primeira Rota da API com Flask e Lógica Funcional.
 
 
+## Endpoints da API (Backend - Flask)
+
+| Rota | Método | Descrição | Status |
+| :--- | :--- | :--- | :--- |
+| `/tarefas` | **POST** | Cria uma nova tarefa no banco de dados. | **Concluída** |
+| `/tarefas` | GET | Lista todas as tarefas. | Em desenvolvimento |
+| `/tarefas/<id>` | GET | Busca uma tarefa específica por ID. |  Pendente |
+| `/tarefas/<id>` | PUT | Atualiza o status/dados de uma tarefa. |  Pendente |
+| `/tarefas/<id>` | DELETE | Remove uma tarefa. |  Pendente |
+
+## Product Backlog (Próximos Passos)
+
+1.  Implementar a função e rota **GET /tarefas** (Listar todas as tarefas).
+2.  Adicionar Testes Unitários com `pytest` para as funções do Backend.
+3.  Definir o setup inicial do Frontend (React, TypeScript, Tailwind CSS).
