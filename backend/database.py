@@ -30,6 +30,26 @@ def create_tables():
     finally:
         if conn:
             conn.close()  
+def get_all_tarefas():
+    conn = None
+    tarefas = []
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        sql = "SELECT * FROM tarefa"
+
+        cursor.execute(sql)
+
+        resultados_row = cursor.fetchall()
+
+        tarefas = [dict(row) for row in resultados_row]
+
+    except sqlite3.Error as e:
+        print(f"Erro ao buscar tarefas: {e}")
+    finally:
+        if conn:
+            conn.close()
+    return tarefas            
 
 if __name__=='__main__':
     print("Inicializando Banco de dados...")

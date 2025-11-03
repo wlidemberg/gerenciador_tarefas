@@ -25,13 +25,14 @@ def adicionar_tarefa():
         cursor.execute(sql, dados_inserir)
         conn.commit()
         id_nova_tarefa = cursor.lastrowid
-
+    
     except Exception as e:
         if conn:
             conn.rollback()
         return jsonify({'erro':f'Erro ao salvar no banco de dados:{e}'})
     finally:
-        conn.close() 
+        if conn:
+            conn.close() 
 
     nova_tarefa_criada = {
         "id": id_nova_tarefa,
@@ -41,6 +42,15 @@ def adicionar_tarefa():
     }                   
 
     return jsonify(nova_tarefa_criada), 201
+
+
+@app.route('/tarefas', methods=['GET'])
+def listar_tarefas():
+    print("Requisição GET /tarefas recebidas.")
+
+    tarefas_recebidas = database.get_all_tarefas()
+
+    return jsonify(tarefas_recebidas), 200
 
 if __name__=="__main__":
     print("Inicializando banco de dados (se necessario)...")
