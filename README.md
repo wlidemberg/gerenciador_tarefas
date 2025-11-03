@@ -23,9 +23,20 @@ Este projeto serve como ambiente de aprendizado profissional e prático para o d
 | **Qualidade** | `pytest` | Ferramenta padrão para testes unitários em Python. | Pendente |
 
 ## Configurações do Ambiente de Desenvolvimento
+
+### Pré-requisitos
 * Python 3.14
 * Node.js 18+ (para o Frontend)
 * VS Code
+
+### backend(python)
+1. Navegue atá a pasta `backend\`: `cd backend`
+2. Crie um ambiente virtual: `python -m venv .venv`
+3. Ative o ambiente: `.\.venv\Scripts\activate`
+4. Instale as dependências: `pip install -r requirements.txt`
+5. Rode o servidor: `python app.py`
+
+
 
 ## Product Backlog (Próximos Passos)
 
@@ -39,13 +50,14 @@ Este projeto serve como ambiente de aprendizado profissional e prático para o d
 | Rota | Método | Descrição | Status |
 | :--- | :--- | :--- | :--- |
 | `/tarefas` | **POST** | Cria uma nova tarefa no banco de dados. | **Concluída** |
-| `/tarefas` | GET | Lista todas as tarefas. | Em desenvolvimento |
+| `/tarefas` | GET | Lista todas as tarefas. | **Concluída** |
 | `/tarefas/<id>` | GET | Busca uma tarefa específica por ID. |  Pendente |
 | `/tarefas/<id>` | PUT | Atualiza o status/dados de uma tarefa. |  Pendente |
 | `/tarefas/<id>` | DELETE | Remove uma tarefa. |  Pendente |
 
 ## Product Backlog (Próximos Passos)
 
-1.  Implementar a função e rota **GET /tarefas** (Listar todas as tarefas).
-2.  Adicionar Testes Unitários com `pytest` para as funções do Backend.
-3.  Definir o setup inicial do Frontend (React, TypeScript, Tailwind CSS).
+1. **[QA]** Adicionar Testes Unitários com `pytest` para `database.py` e rotas `POST` e `GET`. (prioridade máxima)  
+2. **[Backend]** Implementar a função e rota **GET /tarefas/<id>**, `PUT /tarefas/<id>` e `DELETE /tarefas/<id>`.
+3. **[Frontend]** Definir o setup inicial do Frontend (React, TypeScript, tailwind(CSS)).
+4. **[Integração]** Conectar o Frontend às rotas `POST` e `GET` para criar e listar as tarefas.
