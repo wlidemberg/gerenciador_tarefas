@@ -49,7 +49,38 @@ def get_all_tarefas():
     finally:
         if conn:
             conn.close()
-    return tarefas            
+    return tarefas        
+
+
+def add_tarefa(titulo, descricao, status='pendente'):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # 1. Comando SQL para inserir a tarefa
+    sql_insert = """
+    INSERT INTO tarefa (titulo, descricao, status)
+    VALUES (?, ?, ?)
+    """
+    
+    # 2. Executa o comando, passando a descrição como None se não for fornecida
+    cursor.execute(sql_insert, (titulo, descricao or '', status))
+    
+    # 3. Commita a transação
+    conn.commit()
+    
+    # 4. Obtém o ID da última linha inserida
+    tarefa_id = cursor.lastrowid
+    
+    # 5. Obtém a tarefa completa (útil para retornar na API)
+    cursor.execute("SELECT * FROM tarefa WHERE id = ?", (tarefa_id,))
+    nova_tarefa = cursor.fetchone()
+    
+    conn.close()
+    
+    # Converte o objeto Row para dict antes de retornar (se necessário)
+    if nova_tarefa:
+        return dict(nova_tarefa) 
+    return None
 
 if __name__=='__main__':
     print("Inicializando Banco de dados...")
