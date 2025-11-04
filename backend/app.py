@@ -37,7 +37,7 @@ def adicionar_tarefa():
     nova_tarefa_criada = {
         "id": id_nova_tarefa,
         "titulo":titulo_tarefa,
-        "descricao":descricao_tarefa,
+        "descricao":descricao_tarefa,   
         "status":"pendente"
     }                   
 
