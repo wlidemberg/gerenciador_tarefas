@@ -17,7 +17,7 @@ def create_tables():
         status TEXT NOT NULL DEFAULT 'pendente'
     );
     """
-
+    conn = None 
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
