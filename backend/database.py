@@ -82,6 +82,52 @@ def add_tarefa(titulo, descricao, status='pendente'):
         return dict(nova_tarefa) 
     return None
 
+def update_tarefa(tarefa_id, titulo=None, descricao=None, status=None):
+    """
+    Atualiza uma tarefa no banco de dados e retorna a tarefa atualizada.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Query SQL para atualizar a tarefa. 
+    # Usamos WHERE id = ? para garantir que apenas a tarefa correta seja modificada.
+    sql = "UPDATE tarefa SET titulo=?, descricao=?, status=? WHERE id=?"
+
+    cursor.execute(sql, (titulo, descricao, status, tarefa_id))
+    conn.commit()
+
+    # Verificamos quantas linhas foram afetadas para saber se a tarefa existia
+    rows_affected = cursor.rowcount
+
+    if rows_affected == 0:
+        conn.close()
+        return None  # Tarefa não encontrada
+    
+    cursor.execute = ("SELECT * FROM tarefa WHERE id=?", (tarefa_id))
+    tarefa_atualizada = cursor.fetchone()
+
+    conn.close()
+
+    if tarefa_atualizada:
+        return dict(tarefa_atualizada)
+    return None
+
+def delete_tarefa(tarefa_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    sql_delete = "DELETE FROM tarefas WHERE id=?"
+    cursor.execute(sql_delete, (tarefa_id,))
+    conn.commit()
+
+    # Retorna o número de linhas que foram excluídas
+    rows_affected = cursor.rowcount
+
+    conn.close()
+
+    return rows_affected
+
+
 if __name__=='__main__':
     print("Inicializando Banco de dados...")
     create_tables()

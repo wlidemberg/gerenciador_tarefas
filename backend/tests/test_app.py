@@ -145,3 +145,134 @@ def test_post_tarefas_erro_validacao(client):
     dados_retornados = json.loads(response.data)
     assert 'erro' in dados_retornados
     assert 'O campo titulo é obrigatorio' in dados_retornados['erro']
+
+
+# ----------------------------------------------------------------------------------
+# 5. TESTE: PUT /tarefas/<id> (Atualização)
+# ----------------------------------------------------------------------------------
+
+@patch('database.update_tarefa')
+def test_put_tarefa_sucesso(mock_update_tarefa, client):
+    """
+    Testa se a rota PUT /tarefas/<id> atualiza uma tarefa e retorna 200 OK.
+    """  
+
+    TAREFA_ID = 5
+
+    # 1. SETUP: Dados que enviaremos para atualizar a tarefa
+    dados_atualizacao = {
+        'titulo':'Tarefa Atualizada',
+        'descricao':'Descrição atualizada',
+        'status':'concluída'
+    }
+
+    # 2. SETUP: Mockamos o retorno da função update_tarefa
+    # Deve retornar o objeto completo atualizado
+    tarefa_atualizada = {
+        "id":TAREFA_ID,
+        'titulo': dados_atualizacao['titulo'],
+        'descricao':dados_atualizacao['descricao'],
+        'status':dados_atualizacao['status']
+    }
+
+    mock_update_tarefa.return_value = tarefa_atualizada
+
+    # Ação: Requisição PUT simulada
+    response = client.put(
+        f'/tarefas/{TAREFA_ID}',
+        data=json.dumps(dados_atualizacao),
+        content_type='application/json'
+    )
+
+    # Verificação (Assert)
+    # 1. Status Code
+    assert response.status_code == 200, f'Esperado 200, recebido {response.status_code}'
+
+    # Verifica se a função de banco de dados foi chamada com os parametros corretos
+    mock_update_tarefa.assert_called_once_with(
+        tarefa_id=TAREFA_ID,
+        titulo = dados_atualizacao['titulo'],
+        descricao=dados_atualizacao['descricao'],
+        status=dados_atualizacao['status']    
+    )
+
+    # 3. Conteúdo da Resposta
+    dados_retornados = json.loads(response.data)
+    assert dados_retornados['id'] == TAREFA_ID
+    assert dados_retornados['titulo'] == 'Tarefa Atualizada'
+    assert dados_retornados['status'] == 'concluída'
+
+@patch('database.update_tarefa')
+def test_put_tarefa_nao_encontrada(mock_update_tarefa, client):
+    """
+    Testa se a rota PUT /tarefas/<id> retorna 404 quando a tarefa não existe.
+    """
+
+    TAREFA_ID = 999
+
+    # Arrange (prepara): Confugura o cenbario de teste (cria dados, inicializa objetos)
+    # 1. SETUP: Mockamos(simulamos) o retorno como None, simulando que a terefa não foi encontrada 
+    mock_update_tarefa.return_value = None
+
+    # Act (ação): Executa o código que se quer testar
+    # Requisição PUT simulada
+    response = client.put(
+        f'/tarefas/{TAREFA_ID}',
+        data=json.dumps({'titulo':'Qualquer título'}),
+        content_type='application/json'
+    )
+
+    # Assert (Afirma): Verifica se o  resultado da ação esta conforme esperado
+    #  1. Status Code
+    assert response.status_code == 404, f'Esperado 404, recebido {response.status_code}'
+
+    # 2. Mensagem de Erro
+    assert 'erro' in json.loads(response.data)
+    assert f'Tarefa com ID {TAREFA_ID} não encontrada para atualização' in json.loads(response.data)['erro']
+
+# ----------------------------------------------------------------------------------
+# 6. TESTE: DELETE /tarefas/<id> (Exclusão)
+# ----------------------------------------------------------------------------------
+@patch('database.delete_tarefa')
+def test_delete_tarefa_sucesso(mock_delete_tarefa, client):
+    """ Testa se a rota DELETE /tarefas/<id> exclui a tarefa e retorna 204 no Content """
+    TAREFA_ID = 10
+
+    # SETUP: Mockamos o retorno com 1 (uma linha afetada, ou seja, sucesso)
+    mock_delete_tarefa.return_value = 1
+
+    # Ação: Requisição DELETE simulada
+    response =client.delete(f"/tarefas/{TAREFA_ID}")
+
+    # Verificação (Assert)
+    # 1. Status Code
+    assert response.status_code == 204, f"Esperado 204, obtido {response.status_code}"
+
+    # 2. Verifica se a função de banco de dados foi chamada
+    mock_delete_tarefa.assert_called_once_with(TAREFA_ID)
+
+    # 3. Conteúdo de resposta (deve ser vazia para 204)
+    assert response.data ==b''
+
+@patch('database.delete_tarefa')
+def test_delete_tarefa_nao_encontrada(mock_delete_tarefa, client):
+    """ Testa se a rota DELETE /terefas/<id> retorna 404 quando a tarefa não existi """
+    TAREFA_ID = 9999
+
+    # SETUP: Mockamos o retorno com 0 (nenhuma linha afetda, ou seja, falha)
+    mock_delete_tarefa.return_value = 0
+
+    # Ação: Requisiçãp DELETE simulada
+    response = client.delete(f"/tarefas/{TAREFA_ID}")
+
+    # Verificação (Assert)
+
+    # 1. Status Code
+    assert response.status_code == 404, f"Esperado 404, obtido {response.status_code}"
+
+    # 2. Mensagem de Erro
+    dados_retornados = json.loads(response.data)
+    assert 'erro' in dados_retornados
+    assert f"Tarefa com ID {TAREFA_ID} não encontrada para exclusão." in dados_retornados['erro']
+
+
