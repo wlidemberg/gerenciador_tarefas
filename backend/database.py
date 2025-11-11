@@ -127,6 +127,21 @@ def delete_tarefa(tarefa_id):
 
     return rows_affected
 
+def get_tarefa_by_id(tarefa_id):
+    """ Busca uma única tarefa pelo seu ID """
+
+    conn  =get_db_connection()
+    cursor = conn.cursor()
+
+    # Busca a tarefa pelo ID
+    sql = "SELECT * FROM tarefa WHERE id=?"
+    cursor.execute(sql, (tarefa_id))
+    tarefa = cursor.fetchone()
+
+    if tarefa:
+        return dict(tarefa) # Retorna como dicionário
+    return None # Retorna None se não encontar
+
 
 if __name__=='__main__':
     print("Inicializando Banco de dados...")

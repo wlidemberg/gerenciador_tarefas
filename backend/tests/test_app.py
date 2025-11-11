@@ -275,4 +275,55 @@ def test_delete_tarefa_nao_encontrada(mock_delete_tarefa, client):
     assert 'erro' in dados_retornados
     assert f"Tarefa com ID {TAREFA_ID} não encontrada para exclusão." in dados_retornados['erro']
 
+# ----------------------------------------------------------------------------------
+# 7. TESTE: GET /tarefas/<id> (Busca por ID)
+# ----------------------------------------------------------------------------------
+@patch('database.get_tarefa_by_id')   
+def test_get_tarefa__por__id_sucesso(mock_get_tarefa_by_id, client):
+    """ Testa se a rota GET /tarefas/<id> retorna 200 OK e a tarefa correta"""
+    TAREFA_ID = 1
+
+    
+    tarefa_mock = {'id':TAREFA_ID, 'titulo':'tarefa única', 'descricao':'Detalhes', 'status':'pendente'}
+
+    # SETUP: Mockamos o retorno da função get_tarefa_by_id
+    mock_get_tarefa_by_id.return_value = tarefa_mock
+
+    # Ação: Requisição GET simulada 
+    response = client.get(f"/tarefas/{TAREFA_ID}")
+
+    # Verificação (assert)
+
+    # 1. Status Code
+    assert response.status_code == 200, f"Esperado 200, obtido {response.status_code}"
+
+    # 2. Conteúdo da Resposta
+    assert json.loads(response.data) == tarefa_mock
+
+    # 3. Verifica se a função de banco de dados foi chamada com o ID correto
+    mock_get_tarefa_by_id.assert_called_once_with(TAREFA_ID)    
+
+@patch('database.get_tarefa_by_id')
+def test_get_tarefa_por_id_nao_encontrada(mock_get_tarefa_by_id, client):
+    """ Testa se a rota GET /tarefas/<id> retorna 404 quando a tarefa não existe"""
+    TAREFA_ID = 9999
+
+    # SETUP: Mockamos o retorno como None, simulando que a tarefa não foi encontrada
+    mock_get_tarefa_by_id.return_value = None
+
+    # Ação: Requisição GET simulada
+    response = client.get(f"/tarefas/{TAREFA_ID}")
+
+    # Verificação (Assert)
+
+    # 1. Status Code
+    assert response.status_code == 404, f"Esperado 404, obtido {response.status_code}"
+
+    # 2. Mensagem de Erro
+    dados_retornados = json.loads(response.data)
+    assert 'erro' in dados_retornados
+    assert f"Tarefa com ID {TAREFA_ID} não encontrada." in dados_retornados['erro']
+
+    # 3. Verifica se a função de banco de dados foi chamada com o ID correto
+    mock_get_tarefa_by_id.assert_called_once_with(TAREFA_ID)   
 

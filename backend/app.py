@@ -88,6 +88,15 @@ def deletar_tarefa(tarefa_id):
     else:
         return jsonify({'erro':f'Tarefa com ID {tarefa_id} não encontrada para exclusão.'}), 404
 
+@app.route('/tarefas/<int:tarefa_id>', methods=['GET'])
+def buscar_tarefa(tarefa_id):
+    tarefa_encontrada = database.get_tarefa_by_id(tarefa_id)
+
+    if tarefa_encontrada:
+        return jsonify(tarefa_encontrada), 200
+    else:
+        return jsonify({'erro':f'Tarefa com ID {tarefa_id} não encontrada.'}), 404
+
 if __name__=="__main__":
     print("Inicializando banco de dados (se necessario)...")
     database.create_tables()
