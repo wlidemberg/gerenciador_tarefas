@@ -15,12 +15,12 @@ Este projeto serve como ambiente de aprendizado profissional e prático para o d
 ## Tecnologias Utilizadas
 | Categorias | Tecnologias | Justificativa | Status |
 | :--- | :--- | :--- | :--- |
-| **Backend** | Python (funcional) | Linguagem de propósito geral, com foco em clareza, imutabilidade e funções puras. | Em implementação |
-| | Flask | Micro-framework leve, ideal para iniciar APIs de forma rápida e modular. | Em Implementação |
-| | SQLite | Banco de dados relacional para persistência local inicial. | pendente |
+| **Backend** | Python (funcional) | Linguagem de propósito geral, com foco em clareza, imutabilidade e funções puras. | Conclúido |
+| | Flask | Micro-framework leve, ideal para iniciar APIs de forma rápida e modular. | Conclúido |
+| | SQLite | Banco de dados relacional para persistência local inicial. | Conclúido |
 | **Frontend** | React + TS | Biblioteca moderna com tipagem estática, aumentando a manutenibilidade. | Pendente |
 | | Tailwind CSS | Framework de CSS *utility-first* para desenvolvimento rápido e responsivo | Pendente |
-| **Qualidade** | `pytest` | Ferramenta padrão para testes unitários em Python. | Pendente |
+| **Qualidade** | `pytest` | Ferramenta padrão para testes unitários em Python. | Conclúido |
 
 ## Configurações do Ambiente de Desenvolvimento
 
@@ -51,13 +51,15 @@ Este projeto serve como ambiente de aprendizado profissional e prático para o d
 | :--- | :--- | :--- | :--- |
 | `/tarefas` | **POST** | Cria uma nova tarefa no banco de dados. | **Concluída** |
 | `/tarefas` | GET | Lista todas as tarefas. | **Concluída** |
-| `/tarefas/<id>` | GET | Busca uma tarefa específica por ID. |  Pendente |
-| `/tarefas/<id>` | PUT | Atualiza o status/dados de uma tarefa. |  Pendente |
-| `/tarefas/<id>` | DELETE | Remove uma tarefa. |  Pendente |
+| `/tarefas/<id>` | GET | Busca uma tarefa específica por ID. |  **Concluída** |
+| `/tarefas/<id>` | PUT | Atualiza o status/dados de uma tarefa. |  **Concluída** |
+| `/tarefas/<id>` | DELETE | Remove uma tarefa. |  **Concluída** |
 
 ## Product Backlog (Próximos Passos)
 
-1. **[QA]** Adicionar Testes Unitários com `pytest` para `database.py` e rotas `POST` e `GET`. (prioridade máxima)  
-2. **[Backend]** Implementar a função e rota **GET /tarefas/<id>**, `PUT /tarefas/<id>` e `DELETE /tarefas/<id>`.
-3. **[Frontend]** Definir o setup inicial do Frontend (React, TypeScript, tailwind(CSS)).
-4. **[Integração]** Conectar o Frontend às rotas `POST` e `GET` para criar e listar as tarefas.
+1. **[Frontend]** Definir o setup inicial do Frontend (React, TypeScript, tailwind(CSS)).
+2. **[Frontend]** Criar o componente de listagem de tarefas (`GET /tarefas`).
+3. **[Frontend]** Criar componente de formulário para adicionar novas tarefas (`POST /tarefas`).
+4. **[Frontend]** Implementar a funcionalidade de marcar/desmarcar (atualizar `status` via `PUT`).
+5. **[Frontend]** implementar a funcionalidade de excluir tarefas (`DELETE /tarefas/<id>`).
+2. **[Integração]** Conectar o Frontend às rotas `POST` e `GET` para criar e listar as tarefas.
